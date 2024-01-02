@@ -2,18 +2,28 @@ import { Ratelimit } from "@upstash/ratelimit";
 import redis from "../../utils/redis";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { Console } from "console";
+import OpenAI from "openai";
 
+// Initialize the OpenAI client with the API key. This key is essential for authenticating 
+// the requests with OpenAI's API services.
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 // Create a new ratelimiter, that allows 5 requests per 24 hours
 const ratelimit = redis
   ? new Ratelimit({
-      redis: redis,
-      limiter: Ratelimit.fixedWindow(5, "1440 m"),
-      analytics: true,
-    })
+    redis: redis,
+    limiter: Ratelimit.fixedWindow(5, "1440 m"),
+    analytics: true,
+  })
   : undefined;
 
 export async function POST(request: Request) {
+
+  const { imageUrl, theme, room } = await request.json();
+
+  console.log('Start: Processing ');
+
   // Rate Limiter Code
   if (ratelimit) {
     const headersList = headers();
@@ -35,7 +45,45 @@ export async function POST(request: Request) {
     }
   }
 
-  const { imageUrl, theme, room } = await request.json();
+  // Describe Picture 
+  const promptText = "Analyze and describe the image in detail. Focus on visual elements like colors, object details, people's positions and expressions, and the environment. Aim for a clear, thorough representation of all visual and textual aspects. The description should describe an A TOK simpson Avatar ";
+
+  // Log the chosen prompt
+  console.log(`Using prompt: ${promptText}`);
+
+  // Sending the image and prompt to OpenAI for processing. This step is crucial for the image analysis.
+  console.log('Sending request to OpenAI');
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4-vision-preview",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: promptText },
+          {
+            type: "image_url",
+            image_url: {
+              url: imageUrl
+            }
+          }
+        ]
+      }
+    ],
+    max_tokens: 200
+  });
+
+  console.log('Received response from OpenAI');
+  console.log('Response:', JSON.stringify(response, null, 2)); // Log the response for debugging
+
+  // Extract and log the analysis from the response
+  const analysis = response?.choices[0]?.message?.content;
+  console.log('Analysis:', analysis);
+
+  //add TOK to analysis
+
+  // Simpsonify 
+
 
   // POST request to Replicate to start the image restoration generation process
   let startResponse = await fetch("https://api.replicate.com/v1/predictions", {
@@ -48,7 +96,7 @@ export async function POST(request: Request) {
       version: "f4d36a72b43ea2fd511cab0afb32539955ee5b28b65c8e3fb7d8abd254be8e91",
       input: {
         //image: imageUrl,
-        prompt: "A TOK Simpsons character of Jean Luc Picard in starfleet uniform",
+        prompt: "A TOK Simpsons character of " + analysis,
         negative_prompt: "ugly, broken, distorted, artefacts, 3D, render, photography",
         width: 512,
         height: 512,
@@ -59,9 +107,9 @@ export async function POST(request: Request) {
         guidance_scale: 7.5,
         apply_watermark: false,
         high_noise_frac: 0.8,
-        prompt_strength: 0.8,
-        num_inference_steps: 30,
-        disable_safety_checker:false
+        prompt_strength: 0.9,
+        num_inference_steps: 50,
+        disable_safety_checker: false
       },
     }),
   });
@@ -83,7 +131,7 @@ export async function POST(request: Request) {
       },
     });
     let jsonFinalResponse = await finalResponse.json();
-    console.log(jsonFinalResponse);
+    // console.log(jsonFinalResponse);
     if (jsonFinalResponse.status === "succeeded") {
       restoredImage = jsonFinalResponse.output;
 

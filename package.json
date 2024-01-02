@@ -21,7 +21,8 @@
 		"react-countup": "^6.4.0",
 		"react-dom": "^18.2.0",
 		"react-use-measure": "^2.1.1",
-		"request-ip": "^3.3.0"
+		"request-ip": "^3.3.0",
+		"openai": "^4.20.1"
 	},
 	"devDependencies": {
 		"@types/node": "18.11.3",
