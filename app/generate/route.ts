@@ -46,7 +46,7 @@ export async function POST(request: Request) {
   }
 
   // Describe Picture 
-  const promptText = "Analyze and describe the image in detail. Focus on visual elements like colors, object details, people's positions and expressions, and the environment. Aim for a clear, thorough representation of all visual and textual aspects. The description should describe an A TOK simpson Avatar ";
+  const promptText = "Analyze and describe the image in detail. Focus on visual elements like colors, object details, people's positions and expressions, and the environment. Aim for a clear, thorough representation of all visual and textual aspects. The description should describe an Avatar for social media ";
 
   // Log the chosen prompt
   console.log(`Using prompt: ${promptText}`);

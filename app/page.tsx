@@ -32,10 +32,10 @@ export default function HomePage() {
           <div className="flex flex-col space-y-10 mt-4 mb-16">
             <div className="flex sm:space-x-8 sm:flex-row flex-col">
               <div>
-                <h3 className="mb-1 font-medium text-lg">Original Picture</h3>
+                <h3 className="mb-1 font-medium text-lg">Generated Picture</h3>
                 <Image
-                  alt="Original photo of a room with roomGPT.io"
-                  src="/original-pic.jpg"
+                  alt="Generated photo "
+                  src="/generated-pic.jpg"
                   className="w-full object-cover h-96 rounded-2xl"
                   width={400}
                   height={400}
@@ -44,10 +44,10 @@ export default function HomePage() {
               <div className="sm:mt-0 mt-8">
                 <h3 className="mb-1 font-medium text-lg">Generated Avatar</h3>
                 <Image
-                  alt="Generated photo of a room with roomGPT.io"
+                  alt="Generated photo of a avatar with simpsonify"
                   width={400}
                   height={400}
-                  src="/generated-pic-2.jpg"
+                  src="/generated-pic-2.png"
                   className="w-full object-cover h-96 rounded-2xl sm:mt-0 mt-2"
                 />
               </div>
