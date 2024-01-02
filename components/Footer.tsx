@@ -33,9 +33,9 @@ export default function Footer() {
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">
         <Link
-          href="https://twitter.com/bzinoun"
+          href="https://twitter.com/xoniques"
           className="group"
-          aria-label="bzinoun on Twitter"
+          aria-label="Xoniques on Twitter"
         >
           <svg
             aria-hidden="true"
