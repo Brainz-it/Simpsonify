@@ -2,6 +2,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import redis from "../../utils/redis";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { Console } from "console";
 
 // Create a new ratelimiter, that allows 5 requests per 24 hours
 const ratelimit = redis
@@ -44,18 +45,23 @@ export async function POST(request: Request) {
       Authorization: "Token " + process.env.REPLICATE_API_KEY,
     },
     body: JSON.stringify({
-      version:
-        "854e8727697a057c525cdb45ab037f64ecca770a1769cc52287c2e56472a247b",
+      version: "f4d36a72b43ea2fd511cab0afb32539955ee5b28b65c8e3fb7d8abd254be8e91",
       input: {
-        image: imageUrl,
-        prompt:
-          room === "Gaming Room"
-            ? "a room for gaming with gaming computers, gaming consoles, and gaming chairs"
-            : `a ${theme.toLowerCase()} ${room.toLowerCase()}`,
-        a_prompt:
-          "best quality, extremely detailed, photo from Pinterest, interior, cinematic photo, ultra-detailed, ultra-realistic, award-winning",
-        n_prompt:
-          "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality",
+        //image: imageUrl,
+        prompt: "A TOK Simpsons character of Jean Luc Picard in starfleet uniform",
+        negative_prompt: "ugly, broken, distorted, artefacts, 3D, render, photography",
+        width: 512,
+        height: 512,
+        refine: "expert_ensemble_refiner",
+        scheduler: "K_EULER",
+        lora_scale: 0.6,
+        num_outputs: 1,
+        guidance_scale: 7.5,
+        apply_watermark: false,
+        high_noise_frac: 0.8,
+        prompt_strength: 0.8,
+        num_inference_steps: 30,
+        disable_safety_checker:false
       },
     }),
   });
@@ -77,9 +83,10 @@ export async function POST(request: Request) {
       },
     });
     let jsonFinalResponse = await finalResponse.json();
-
+    console.log(jsonFinalResponse);
     if (jsonFinalResponse.status === "succeeded") {
       restoredImage = jsonFinalResponse.output;
+
     } else if (jsonFinalResponse.status === "failed") {
       break;
     } else {

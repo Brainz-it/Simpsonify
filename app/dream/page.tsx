@@ -92,7 +92,7 @@ export default function DreamPage() {
     if (res.status !== 200) {
       setError(newPhoto);
     } else {
-      setRestoredImage(newPhoto[1]);
+      setRestoredImage(newPhoto[0]);
     }
     setTimeout(() => {
       setLoading(false);
@@ -104,7 +104,7 @@ export default function DreamPage() {
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
         <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
-          Generate your <span className="text-blue-600">dream</span> room
+          Generate your <span className="text-amber-400">dream</span> room
         </h1>
         <ResizablePanel>
           <AnimatePresence mode="wait">
@@ -227,7 +227,7 @@ export default function DreamPage() {
               {loading && (
                 <button
                   disabled
-                  className="bg-blue-500 rounded-full text-white font-medium px-4 pt-2 pb-3 mt-8 w-40"
+                  className="bg-amber-500 rounded-full text-white font-medium px-4 pt-2 pb-3 mt-8 w-40"
                 >
                   <span className="pt-4">
                     <LoadingDots color="white" style="large" />
@@ -251,7 +251,7 @@ export default function DreamPage() {
                       setRestoredLoaded(false);
                       setError(null);
                     }}
-                    className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
+                    className="bg-amber-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-amber-500/80 transition"
                   >
                     Generate New Room
                   </button>
