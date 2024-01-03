@@ -122,7 +122,7 @@ export default function DreamPage() {
                         alt="1 icon"
                       />
                       <p className="text-left font-medium">
-                        Choose your room theme.
+                        Choose your Sympsons theme.
                       </p>
                     </div>
                     <DropDown
@@ -133,8 +133,8 @@ export default function DreamPage() {
                       themes={themes}
                     />
                   </div>
-                  <div className="space-y-4 w-full max-w-sm">
-                    <div className="flex mt-10 items-center space-x-3">
+                  <div className="mt-4 w-full max-w-sm">
+                    <div className="flex mt-6 w-96 items-center space-x-3">
                       <Image
                         src="/number-2-white.svg"
                         width={30}
@@ -142,25 +142,7 @@ export default function DreamPage() {
                         alt="1 icon"
                       />
                       <p className="text-left font-medium">
-                        Choose your room type.
-                      </p>
-                    </div>
-                    <DropDown
-                      theme={room}
-                      setTheme={(newRoom) => setRoom(newRoom as typeof room)}
-                      themes={rooms}
-                    />
-                  </div>
-                  <div className="mt-4 w-full max-w-sm">
-                    <div className="flex mt-6 w-96 items-center space-x-3">
-                      <Image
-                        src="/number-3-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
-                      <p className="text-left font-medium">
-                        Upload a picture of your room.
+                        Upload a picture of your charactere.
                       </p>
                     </div>
                   </div>
@@ -168,8 +150,7 @@ export default function DreamPage() {
               )}
               {restoredImage && (
                 <div>
-                  Here's your remodeled <b>{room.toLowerCase()}</b> in the{" "}
-                  <b>{theme.toLowerCase()}</b> theme!{" "}
+                  Here's your avatar !
                 </div>
               )}
               <div
