@@ -1,6 +1,6 @@
 {
     "functions": {
-      "app/dream": {
+      "app/generate/*.ts": {
         "memory": 1024,
         "maxDuration": 120
       }
