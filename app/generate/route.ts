@@ -3,6 +3,7 @@ import redis from "../../utils/redis";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import OpenAI from "openai";
+export const maxDuration = 300; // This function can run for a maximum of 300 seconds
 
 // Initialize the OpenAI client with the API key. This key is essential for authenticating 
 // the requests with OpenAI's API services.
