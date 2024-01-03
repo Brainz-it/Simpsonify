@@ -74,7 +74,7 @@ export async function POST(request: Request) {
   });
 
   console.log('Received response from OpenAI');
-  console.log('Response:', JSON.stringify(response, null, 2)); // Log the response for debugging
+ // console.log('Response:', JSON.stringify(response, null, 2)); // Log the response for debugging
 
   // Extract and log the analysis from the response
   const analysis = response?.choices[0]?.message?.content;
@@ -86,6 +86,8 @@ export async function POST(request: Request) {
 
 
   // POST request to Replicate to start the image restoration generation process
+  let endpointUrl = null ; 
+  try {
   let startResponse = await fetch("https://api.replicate.com/v1/predictions", {
     method: "POST",
     headers: {
@@ -113,16 +115,40 @@ export async function POST(request: Request) {
       },
     }),
   });
+  if (!startResponse.ok) {
+    // Log the error status and message
+    console.error("Replicate API Error:", startResponse.status, startResponse.statusText);
+    // Return an error response to the client
+    return NextResponse.json({
+        error: "Failed to start image processing with Replicate API",
+        statusCode: startResponse.status,
+        statusText: startResponse.statusText,
+    }, {
+        status: startResponse.status
+    });
+}
 
-  let jsonStartResponse = await startResponse.json();
+let jsonStartResponse = await startResponse.json();
+     endpointUrl = jsonStartResponse.urls.get;
 
-  let endpointUrl = jsonStartResponse.urls.get;
+} catch (error) {
+    console.error("Error during Replicate API call:", error);
+    return NextResponse.json({
+        error: "An error occurred while processing the image with Replicate API",
+        details: error
+    }, {
+        status: 500 // Internal Server Error
+    });
+}
+
 
   // GET request to get the status of the image restoration process & return the result when it's ready
   let restoredImage: string | null = null;
   while (!restoredImage) {
     // Loop in 1s intervals until the alt text is ready
     console.log("polling for result...");
+    console.log('endpointUrl:', endpointUrl);
+
     let finalResponse = await fetch(endpointUrl, {
       method: "GET",
       headers: {
