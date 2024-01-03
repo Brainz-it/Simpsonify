@@ -147,7 +147,6 @@ let jsonStartResponse = await startResponse.json();
   while (!restoredImage) {
     // Loop in 1s intervals until the alt text is ready
     console.log("polling for result...");
-    console.log('endpointUrl:', endpointUrl);
 
     let finalResponse = await fetch(endpointUrl, {
       method: "GET",
